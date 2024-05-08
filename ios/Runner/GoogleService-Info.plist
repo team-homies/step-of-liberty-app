@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>814225038043-nto1qcqrao4usm0eml3c6pa48mp2lerp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.814225038043-nto1qcqrao4usm0eml3c6pa48mp2lerp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>814225038043-9bcq9fiobd4fs4hps1bh0srkcng7pj8h.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCfsA2ZdW20MhmsQQ4xwn6XP7Aavn6qwpY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>814225038043</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.homis.stepofliberty</string>
+	<key>PROJECT_ID</key>
+	<string>homis-815</string>
+	<key>STORAGE_BUCKET</key>
+	<string>homis-815.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:814225038043:ios:a4776e68d44e23d3670afe</string>
+</dict>
+</plist>

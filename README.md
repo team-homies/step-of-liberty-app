@@ -1,2 +1,6 @@
-# step-of-liberty-app
-step of liberty 앱
+# step-of-liberty
+
+
+
+## Getting Started
+

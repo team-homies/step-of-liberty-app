@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "814225038043",
+    "project_id": "homis-815",
+    "storage_bucket": "homis-815.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814225038043:android:1cab75c4d30b778a670afe",
+        "android_client_info": {
+          "package_name": "com.homis.stepofliberty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814225038043-9bcq9fiobd4fs4hps1bh0srkcng7pj8h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.homis.stepofliberty",
+            "certificate_hash": "c8d4b0d477a854b83b84d4e2c6414bd23748358d"
+          }
+        },
+        {
+          "client_id": "814225038043-e32nr4o1q0f2o9ab33o8qh5qcfi6bhop.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.homis.stepofliberty",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "814225038043-qvetchbl3aqd9e20be9q8vhg3fnd0ga0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8mVktvdaCHcHTYdBRms7xY9Svh9xjvlE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "814225038043-qvetchbl3aqd9e20be9q8vhg3fnd0ga0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "814225038043-nto1qcqrao4usm0eml3c6pa48mp2lerp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.homis.stepofliberty"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
