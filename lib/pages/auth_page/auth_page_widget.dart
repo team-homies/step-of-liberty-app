@@ -1,3 +1,4 @@
+import 'dart:convert';
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -6,7 +7,9 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'auth_page_model.dart';
+import 'package:http/http.dart' as http;
 export 'auth_page_model.dart';
 
 class AuthPageWidget extends StatefulWidget {
@@ -21,6 +24,10 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
   late AuthPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  String? accessToken;
+  int? expired;
+  String? refreshToken;
 
   final animationsMap = {
     'columnOnPageLoadAnimation': AnimationInfo(
@@ -51,6 +58,37 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
     _model = createModel(context, () => AuthPageModel());
   }
 
+  Future<void> fetchQuote(String? userId,String? firebaseToken,String? provider) async {
+    final response = await http.post(Uri.parse('http://158.180.71.117:8157/auth/login')
+      , headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'id': userId!,
+        'firebaseToken': firebaseToken!,
+        'provider': provider!,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      // final data = json.decode(response.body);
+      setState(() {
+        accessToken = data['access_token'];
+        expired = data['expired'];
+        refreshToken = data['refresh_token'];
+      });
+    } else {
+      setState(() {
+        expired = 0;
+      });
+    }
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('access_token', accessToken!);
+    prefs.setInt('expired', expired!);
+    prefs.setString('refresh_token', refreshToken!);
+  }
+
   @override
   void dispose() {
     _model.dispose();
@@ -78,30 +116,30 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
                 child: Text(
                   '로그인',
                   style: FlutterFlowTheme.of(context).displaySmall.override(
-                        fontFamily: 'Plus Jakarta Sans',
-                        color: const Color(0xFF101213),
-                        fontSize: 36.0,
-                        letterSpacing: 0.0,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    fontFamily: 'Plus Jakarta Sans',
+                    color: const Color(0xFF101213),
+                    fontSize: 36.0,
+                    letterSpacing: 0.0,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
               Text(
                 'Sign in to explore history',
                 textAlign: TextAlign.start,
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
-                      fontFamily: 'Plus Jakarta Sans',
-                      color: const Color(0xFF101213),
-                      fontSize: 15.0,
-                      letterSpacing: 0.0,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  fontFamily: 'Plus Jakarta Sans',
+                  color: const Color(0xFF101213),
+                  fontSize: 15.0,
+                  letterSpacing: 0.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               Align(
                 alignment: const AlignmentDirectional(0.0, -1.0),
                 child: Padding(
                   padding:
-                      const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 0.0),
+                  const EdgeInsetsDirectional.fromSTEB(24.0, 16.0, 24.0, 0.0),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
@@ -137,7 +175,7 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
                                           if (user == null) {
                                             return;
                                           }
-
+                                          fetchQuote(user.authUserInfo.email, user.authUserInfo.uid, 'google');
                                           context.goNamedAuth(
                                               'HomePage', context.mounted);
                                         },
@@ -150,30 +188,30 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
                                           width: 230.0,
                                           height: 44.0,
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
                                           iconPadding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
                                           color: Colors.white,
                                           textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily:
-                                                        'Plus Jakarta Sans',
-                                                    color: const Color(0xFF101213),
-                                                    fontSize: 14.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                          FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                            fontFamily:
+                                            'Plus Jakarta Sans',
+                                            color: const Color(0xFF101213),
+                                            fontSize: 14.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                           elevation: 0.0,
                                           borderSide: const BorderSide(
                                             color: Color(0xFFE0E3E7),
                                             width: 2.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(12.0),
+                                          BorderRadius.circular(12.0),
                                           hoverColor: const Color(0xFFF1F4F8),
                                         ),
                                       ),
@@ -203,30 +241,30 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
                                           width: 230.0,
                                           height: 44.0,
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
                                           iconPadding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
                                           color: Colors.white,
                                           textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily:
-                                                        'Plus Jakarta Sans',
-                                                    color: const Color(0xFF101213),
-                                                    fontSize: 14.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                          FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                            fontFamily:
+                                            'Plus Jakarta Sans',
+                                            color: const Color(0xFF101213),
+                                            fontSize: 14.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                           elevation: 0.0,
                                           borderSide: const BorderSide(
                                             color: Color(0xFFE0E3E7),
                                             width: 2.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(12.0),
+                                          BorderRadius.circular(12.0),
                                           hoverColor: const Color(0xFFF1F4F8),
                                         ),
                                       ),
@@ -234,62 +272,62 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
                                     isAndroid
                                         ? Container()
                                         : Padding(
-                                            padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
-                                                    0.0, 0.0, 0.0, 30.0),
-                                            child: FFButtonWidget(
-                                              onPressed: () async {
-                                                GoRouter.of(context)
-                                                    .prepareAuthEvent();
-                                                final user = await authManager
-                                                    .signInWithApple(context);
-                                                if (user == null) {
-                                                  return;
-                                                }
+                                      padding:
+                                      const EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 0.0, 0.0, 30.0),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          GoRouter.of(context)
+                                              .prepareAuthEvent();
+                                          final user = await authManager
+                                              .signInWithApple(context);
+                                          if (user == null) {
+                                            return;
+                                          }
 
-                                                context.goNamedAuth('AuthPage',
-                                                    context.mounted);
-                                              },
-                                              text: '',
-                                              icon: const FaIcon(
-                                                FontAwesomeIcons.apple,
-                                                size: 20.0,
-                                              ),
-                                              options: FFButtonOptions(
-                                                width: 230.0,
-                                                height: 44.0,
-                                                padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 0.0),
-                                                iconPadding:
-                                                    const EdgeInsetsDirectional
-                                                        .fromSTEB(
-                                                            0.0, 0.0, 0.0, 0.0),
-                                                color: Colors.white,
-                                                textStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Plus Jakarta Sans',
-                                                          color:
-                                                              const Color(0xFF101213),
-                                                          fontSize: 14.0,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                elevation: 0.0,
-                                                borderSide: const BorderSide(
-                                                  color: Color(0xFFE0E3E7),
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(12.0),
-                                                hoverColor: const Color(0xFFF1F4F8),
-                                              ),
-                                            ),
+                                          context.goNamedAuth('AuthPage',
+                                              context.mounted);
+                                        },
+                                        text: '',
+                                        icon: const FaIcon(
+                                          FontAwesomeIcons.apple,
+                                          size: 20.0,
+                                        ),
+                                        options: FFButtonOptions(
+                                          width: 230.0,
+                                          height: 44.0,
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                          iconPadding:
+                                          const EdgeInsetsDirectional
+                                              .fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
+                                          color: Colors.white,
+                                          textStyle:
+                                          FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                            fontFamily:
+                                            'Plus Jakarta Sans',
+                                            color:
+                                            const Color(0xFF101213),
+                                            fontSize: 14.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight:
+                                            FontWeight.bold,
                                           ),
+                                          elevation: 0.0,
+                                          borderSide: const BorderSide(
+                                            color: Color(0xFFE0E3E7),
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                          BorderRadius.circular(12.0),
+                                          hoverColor: const Color(0xFFF1F4F8),
+                                        ),
+                                      ),
+                                    ),
                                     Padding(
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           0.0, 0.0, 0.0, 30.0),
@@ -315,30 +353,30 @@ class _AuthPageWidgetState extends State<AuthPageWidget>
                                           width: 230.0,
                                           height: 44.0,
                                           padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
                                           iconPadding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              0.0, 0.0, 0.0, 0.0),
                                           color: Colors.white,
                                           textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .override(
-                                                    fontFamily:
-                                                        'Plus Jakarta Sans',
-                                                    color: const Color(0xFF101213),
-                                                    fontSize: 14.0,
-                                                    letterSpacing: 0.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                          FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                            fontFamily:
+                                            'Plus Jakarta Sans',
+                                            color: const Color(0xFF101213),
+                                            fontSize: 14.0,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                           elevation: 0.0,
                                           borderSide: const BorderSide(
                                             color: Color(0xFFE0E3E7),
                                             width: 2.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(12.0),
+                                          BorderRadius.circular(12.0),
                                           hoverColor: const Color(0xFFF1F4F8),
                                         ),
                                       ),
