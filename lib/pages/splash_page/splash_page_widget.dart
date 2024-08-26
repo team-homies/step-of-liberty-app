@@ -1,9 +1,12 @@
+import 'dart:convert';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'splash_page_model.dart';
+import 'package:http/http.dart' as http;
 export 'splash_page_model.dart';
+
 
 class SplashPageWidget extends StatefulWidget {
   const SplashPageWidget({super.key});
@@ -17,10 +20,29 @@ class _SplashPageWidgetState extends State<SplashPageWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  String? quoteContent;
+
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => SplashPageModel());
+    fetchQuote();
+  }
+
+  Future<void> fetchQuote() async {
+    final response = await http.get(Uri.parse('http://158.180.71.117:8257/quotes'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      // final data = json.decode(response.body);
+      setState(() {
+        quoteContent = data['content'];
+      });
+    } else {
+      setState(() {
+        quoteContent = 'Failed to load quote';
+      });
+    }
   }
 
   @override
@@ -71,27 +93,27 @@ class _SplashPageWidgetState extends State<SplashPageWidget> {
                       Text(
                         '자유의 발자취',
                         style:
-                            FlutterFlowTheme.of(context).displaySmall.override(
-                                  fontFamily: 'Outfit',
-                                  letterSpacing: 0.0,
-                                ),
+                        FlutterFlowTheme.of(context).displaySmall.override(
+                          fontFamily: 'Outfit',
+                          letterSpacing: 0.0,
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(
                             44.0, 15.0, 44.0, 0.0),
                         child: Text(
-                          '나라에 바칠 목숨이 하나밖에 없는 것이\n이 소녀의 유일한 슬픔입니다. - 유관순',
+                          quoteContent ?? 'Loading...',
                           textAlign: TextAlign.center,
                           style:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
+                          FlutterFlowTheme.of(context).labelMedium.override(
+                            fontFamily: 'Readex Pro',
+                            letterSpacing: 0.0,
+                          ),
                         ),
                       ),
                       Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 45.0, 0.0, 0.0),
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 45.0, 0.0, 0.0),
                         child: Container(
                           width: 345.0,
                           height: 345.0,
@@ -126,7 +148,7 @@ class _SplashPageWidgetState extends State<SplashPageWidget> {
                       alignment: const AlignmentDirectional(0.0, 0.0),
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 16.0),
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 16.0),
                         child: FFButtonWidget(
                           onPressed: () async {
                             context.pushNamed(
@@ -150,10 +172,10 @@ class _SplashPageWidgetState extends State<SplashPageWidget> {
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                             textStyle:
-                                FlutterFlowTheme.of(context).bodyLarge.override(
-                                      fontFamily: 'Readex Pro',
-                                      letterSpacing: 0.0,
-                                    ),
+                            FlutterFlowTheme.of(context).bodyLarge.override(
+                              fontFamily: 'Readex Pro',
+                              letterSpacing: 0.0,
+                            ),
                             elevation: 0.0,
                             borderSide: BorderSide(
                               color: FlutterFlowTheme.of(context).alternate,
