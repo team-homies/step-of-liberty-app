@@ -16,6 +16,11 @@ class HistoryTapWidget extends StatefulWidget {
 class _HistoryTapWidgetState extends State<HistoryTapWidget> {
   late HistoryTapModel _model;
 
+  String? userId;
+  String? userEmail;
+  String? userNickName;
+  String? userProfileUrl;
+
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -36,6 +41,35 @@ class _HistoryTapWidgetState extends State<HistoryTapWidget> {
     _model.maybeDispose();
 
     super.dispose();
+  }
+
+  Future<void> fetchGetUser(String? userId,String? firebaseToken,String? provider) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs["access_token"];
+    final response = await http.post(Uri.parse('http://158.180.71.117:8157/auth/user')
+      , headers: <String, String>{
+        'X-Authorization': accessToken!,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+      // final data = json.decode(response.body);
+      setState(() {
+        userId = data['id'];
+        userEmail = data['email'];
+        userNickName = data['nickname'];
+        userProfileUrl = data['profile_url'];
+      });
+    } else {
+      setState(() {
+        
+      });
+    }
+    // final prefs = await SharedPreferences.getInstance();
+    // prefs.setString('access_token', accessToken!);
+    // prefs.setInt('expired', expired!);
+    // prefs.setString('refresh_token', refreshToken!);
   }
 
   @override
